@@ -1,35 +1,41 @@
 package ru.otus.homework.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.stereotype.Controller;
 import ru.otus.homework.model.Answer;
 import ru.otus.homework.model.Question;
 import ru.otus.homework.model.User;
 import ru.otus.homework.service.QuestionService;
 import ru.otus.homework.service.QuestionServiceImpl;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.util.*;
+import org.springframework.context.MessageSource;
 
-
+@Controller
+@PropertySource("classpath:app.properties")
 public class TestController {
-
+    @Autowired
     private final QuestionService questionService;
+    @Autowired
+    private final ResourceBundle bundle;
 
-    private final static String FIRST_QUESTION = "Назовите свое Имя и Фамилию";
-    private final static String RULES = "Если хотите завершить тестирование - введите символ +";
-    private final static String FINAL_WORD_1 = "Опрос завершен. Вы ответили на ";
-    private final static String FINAL_WORD_2 = " вопросов из ";
-
-    public TestController(QuestionServiceImpl questionService) {
+    public TestController(QuestionServiceImpl questionService, @Qualifier("bundle") ResourceBundle bundle) {
         this.questionService = questionService;
+        this.bundle = bundle;
     }
 
     public void initTest() {
         List<Answer> answers = new ArrayList<>();
 
-        System.out.println(FIRST_QUESTION);
+        System.out.println(bundle.getString("FIRST_QUESTION"));
         User user = initUser();
-        System.out.println(RULES);
+        System.out.println(bundle.getString("RULES"));
 
         List<Question> questions = questionService.getAllQuestions();
         for(Question question : questions){
@@ -45,7 +51,7 @@ public class TestController {
             id++;
             System.out.println(answer.getQuestion().getQuestion() + " - " + answer.getAnswer());
         }
-        System.out.println(FINAL_WORD_1 + answers.size() + FINAL_WORD_2 + questions.size());
+        System.out.println(bundle.getString("FINAL_WORD_1") + answers.size() + " " + bundle.getString("FINAL_WORD_2") + questions.size());
 
     }
 
