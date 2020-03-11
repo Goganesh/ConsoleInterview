@@ -2,7 +2,6 @@ package ru.otus.homework.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Controller;
 import ru.otus.homework.model.Answer;
@@ -10,12 +9,7 @@ import ru.otus.homework.model.Question;
 import ru.otus.homework.model.User;
 import ru.otus.homework.service.QuestionService;
 import ru.otus.homework.service.QuestionServiceImpl;
-
-import java.io.UnsupportedEncodingException;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.util.*;
-import org.springframework.context.MessageSource;
 
 @Controller
 @PropertySource("classpath:app.properties")
