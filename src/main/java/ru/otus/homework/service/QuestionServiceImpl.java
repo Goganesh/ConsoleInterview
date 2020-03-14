@@ -3,6 +3,7 @@ package ru.otus.homework.service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ru.otus.homework.dao.QuestionDao;
 import ru.otus.homework.dao.QuestionDaoCSV;
@@ -13,12 +14,12 @@ import java.util.List;
 
 @Service("questionService")
 public class QuestionServiceImpl implements QuestionService {
-    @Autowired
+
     private final QuestionDao questionDao;
 
     private static Logger logger = LoggerFactory.getLogger(QuestionDaoCSV.class);
 
-    public QuestionServiceImpl(QuestionDaoCSV questionDao) {
+    public QuestionServiceImpl(@Qualifier("questionDao") QuestionDao questionDao) {
         this.questionDao = questionDao;
     }
 

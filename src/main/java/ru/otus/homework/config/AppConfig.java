@@ -22,7 +22,7 @@ public class AppConfig {
 
     @Bean("bundle")
     public ResourceBundle getResourceBundle(@Value("${locale.prefix}") String localePrefix){
-        return ResourceBundle.getBundle("i18n/bundle", Locale.forLanguageTag(localePrefix), new EncodingControl());
+        return ResourceBundle.getBundle("i18n/bundle", Locale.forLanguageTag(localePrefix), new EncodingControl("windows-1251"));
     }
 
     @Bean("dataSource")

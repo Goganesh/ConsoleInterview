@@ -1,5 +1,7 @@
 package ru.otus.homework.dao;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.io.Resource;
@@ -21,6 +23,8 @@ public class QuestionDaoCSV implements QuestionDao {
     @Autowired
     private final Resource dataSource;
 
+    private static Logger logger = LoggerFactory.getLogger(QuestionDaoCSV.class);
+
     public QuestionDaoCSV(@Qualifier("dataSource") Resource dataSource) {
         this.dataSource = dataSource;
     }
@@ -39,7 +43,9 @@ public class QuestionDaoCSV implements QuestionDao {
             try {
                 while ((question = beanReader.read(Question.class, header, processors)) != null) {
                     // process question
+                    logger.debug(question.toString());
                     questions.add(question);
+
                 }
             } finally {
                 if (beanReader != null) {

@@ -1,65 +1,63 @@
 package ru.otus.homework.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Service;
 import ru.otus.homework.model.Answer;
 import ru.otus.homework.model.Question;
+import ru.otus.homework.model.TestResult;
 import ru.otus.homework.model.User;
+import ru.otus.homework.service.BundleService;
 import ru.otus.homework.service.QuestionService;
-import ru.otus.homework.service.QuestionServiceImpl;
+import ru.otus.homework.service.TestService;
 import java.util.*;
 
-@Controller
-@PropertySource("classpath:app.properties")
+@Service
 public class TestController {
-    @Autowired
-    private final QuestionService questionService;
-    @Autowired
-    private final ResourceBundle bundle;
 
-    public TestController(QuestionServiceImpl questionService, @Qualifier("bundle") ResourceBundle bundle) {
+    private final QuestionService questionService;
+    private final TestService testService;
+    private final BundleService bundleService;
+
+    private static Logger logger = LoggerFactory.getLogger(TestController.class);
+
+    public TestController(@Qualifier("questionService")QuestionService questionService,
+                          @Qualifier("bundleService") BundleService bundleService,
+                          @Qualifier("testService") TestService testService) {
         this.questionService = questionService;
-        this.bundle = bundle;
+        this.bundleService = bundleService;
+        this.testService = testService;
     }
 
     public void initTest() {
+        TestResult result = new TestResult();
         List<Answer> answers = new ArrayList<>();
+        User user = new User();
+        result.setAnswers(answers);
+        result.setUser(user);
 
-        System.out.println(bundle.getString("FIRST_QUESTION"));
-        User user = initUser();
-        System.out.println(bundle.getString("RULES"));
+        String userName = testService.askUserName(bundleService.getString("FIRST_QUESTION"));
+        user.setName(userName);
+
+        testService.tellRules(bundleService.getString("RULES"));
 
         List<Question> questions = questionService.getAllQuestions();
         for(Question question : questions){
-            int id = 1;
-            System.out.println(question.getQuestion());
-            Answer answer = initAnswer(question, user, id);
+
+            Answer answer = new Answer();
+            answer.setQuestion(question);
+            answer.setAnswer(testService.callAnswerForQuestion(question.getQuestion()));
 
             if (answer.getAnswer().equals("+")) {
                 break;
             }
 
             answers.add(answer);
-            id++;
-            System.out.println(answer.getQuestion().getQuestion() + " - " + answer.getAnswer());
+            logger.debug(answer.getQuestion().getQuestion() + " - " + answer.getAnswer());
         }
-        System.out.println(bundle.getString("FINAL_WORD_1") + answers.size() + " " + bundle.getString("FINAL_WORD_2") + questions.size());
-
+        testService.tellResult(bundleService.getString("FINAL_WORD_1") + answers.size() + " " + bundleService.getString("FINAL_WORD_2") + questions.size());
+        logger.debug(result.toString());
     }
 
-    private User initUser(){
-        Scanner scan = new Scanner(System.in);
-        String userName = scan.nextLine();
-
-        return new User(1, userName);
-    }
-
-    private Answer initAnswer(Question question, User user, int answerId) {
-        Scanner scan = new Scanner(System.in);
-        String answerLine = scan.nextLine();
-
-        return new Answer(answerId, question, answerLine, user);
-    }
 }

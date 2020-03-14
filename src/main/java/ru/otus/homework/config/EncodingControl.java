@@ -10,6 +10,13 @@ import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
 
 public class EncodingControl extends ResourceBundle.Control {
+
+    private final String charsetName;
+
+    public EncodingControl(String charsetName) {
+        this.charsetName = charsetName;
+    }
+
     public ResourceBundle newBundle
             (String baseName, Locale locale, String format, ClassLoader loader, boolean reload)
             throws IOException
@@ -33,8 +40,8 @@ public class EncodingControl extends ResourceBundle.Control {
         }
         if (stream != null) {
             try {
-                // Only this line is changed to make it to read properties files as UTF-8.
-                bundle = new PropertyResourceBundle(new InputStreamReader(stream, "windows-1251"));
+                // Only this line is changed to make it to read properties files as UTF-8 or another encoding.
+                bundle = new PropertyResourceBundle(new InputStreamReader(stream, charsetName));
             } finally {
                 stream.close();
             }

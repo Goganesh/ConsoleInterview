@@ -5,9 +5,6 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import ru.otus.homework.controller.TestController;
 
-import java.io.UnsupportedEncodingException;
-import java.util.Locale;
-
 @Configuration
 @ComponentScan
 
