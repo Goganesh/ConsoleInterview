@@ -26,7 +26,7 @@ public class AppConfig {
     }
 
     @Bean("dataSource")
-    public Resource getResourceForCSV(@Qualifier("bundle") ResourceBundle bundle){
-        return new ClassPathResource(bundle.getString("csv.classpath"));
+    public Resource getResourceForCSV(@Value("${csv.classpath}") String csvClasspath){
+        return new ClassPathResource(csvClasspath);
     }
 }
