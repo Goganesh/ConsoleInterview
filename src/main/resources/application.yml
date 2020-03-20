@@ -1,0 +1,8 @@
+spring:
+    banner:
+        location: banner/banner.txt
+locale:
+    prefix: ru-RU
+    csvClasspath: question/questionRU.csv
+    #    prefix: en-EN
+    #    classpath: question/questionEN.csv
