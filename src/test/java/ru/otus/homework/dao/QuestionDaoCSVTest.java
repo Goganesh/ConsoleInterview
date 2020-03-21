@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import ru.otus.homework.config.AppConfig;
-import ru.otus.homework.exeption.QuestionException;
+import ru.otus.homework.exeption.QuestionLoadingException;
 import ru.otus.homework.model.Question;
 import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
@@ -22,7 +22,7 @@ class QuestionDaoCSVTest {
     private QuestionDao questionDao;
 
     @Test
-    void checkSizeOfSource() throws QuestionException {
+    void checkSizeOfSource() throws QuestionLoadingException {
         List<Question> questions = questionDao.getAllQuestions();
         assertEquals(5, questions.size());
     }

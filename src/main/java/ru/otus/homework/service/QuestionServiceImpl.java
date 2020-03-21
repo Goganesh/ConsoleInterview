@@ -2,12 +2,11 @@ package ru.otus.homework.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ru.otus.homework.dao.QuestionDao;
 import ru.otus.homework.dao.QuestionDaoCSV;
-import ru.otus.homework.exeption.QuestionException;
+import ru.otus.homework.exeption.QuestionLoadingException;
 import ru.otus.homework.model.Question;
 import java.util.List;
 
@@ -28,7 +27,7 @@ public class QuestionServiceImpl implements QuestionService {
         List<Question> questions = null;
         try {
             questions = questionDao.getAllQuestions();
-        } catch (QuestionException ex) {
+        } catch (QuestionLoadingException ex) {
             logger.error(ex.getMessage());
         }
         return questions;
