@@ -1,5 +1,6 @@
 package ru.otus.homework.controller;
 
+import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -11,43 +12,38 @@ import ru.otus.homework.model.User;
 import ru.otus.homework.service.BundleService;
 import ru.otus.homework.service.QuestionService;
 import ru.otus.homework.service.IOService;
+import ru.otus.homework.service.UserService;
+
 import java.util.*;
 
 @Service
+@AllArgsConstructor
 public class TestController {
 
     private final QuestionService questionService;
-    private final IOService IOService;
+    private final UserService userService;
+    private final IOService ioService;
     private final BundleService bundleService;
 
     private static Logger logger = LoggerFactory.getLogger(TestController.class);
 
-    public TestController(@Qualifier("questionService")QuestionService questionService,
-                          @Qualifier("bundleService") BundleService bundleService,
-                          @Qualifier("ioService") IOService IOService) {
-        this.questionService = questionService;
-        this.bundleService = bundleService;
-        this.IOService = IOService;
-    }
-
     public void initTest() {
         TestResult result = new TestResult();
         List<Answer> answers = new ArrayList<>();
-        User user = new User();
         result.setAnswers(answers);
+
+        String userName = ioService.printResponse(bundleService.getString("user.data.request"));
+        User user = userService.saveUser(userName);
         result.setUser(user);
 
-        String userName = IOService.printResponse(bundleService.getString("user.data.request"));
-        user.setName(userName);
-
-        IOService.printRequest(bundleService.getString("user.data.rules"));
+        ioService.printRequest(bundleService.getString("user.data.rules"));
 
         List<Question> questions = questionService.getAllQuestions();
         for(Question question : questions){
 
             Answer answer = new Answer();
             answer.setQuestion(question);
-            answer.setAnswer(IOService.printResponse(question.getQuestion()));
+            answer.setAnswer(ioService.printResponse(question.getQuestion()));
 
             if (answer.getAnswer().equals("+")) {
                 break;
@@ -56,8 +52,8 @@ public class TestController {
             answers.add(answer);
             logger.debug(answer.getQuestion().getQuestion() + " - " + answer.getAnswer());
         }
-        IOService.printRequest(bundleService.getString("user.data.final1") + answers.size() + " " + bundleService.getString("user.data.final2") + questions.size());
-        logger.debug(result.toString());
+        ioService.printRequest(bundleService.getString("user.data.final1") + answers.size() + " " + bundleService.getString("user.data.final2") + questions.size());
+        logger.info(result.toString());
     }
 
 }

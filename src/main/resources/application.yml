@@ -2,7 +2,7 @@ spring:
     banner:
         location: banner/banner.txt
 locale:
-    defaultLocale: ru-RU
+    defaultLocale: en-EN
     localeClasspath:
         ru-RU: question/questionRU.csv
         en-EN: question/questionEN.csv

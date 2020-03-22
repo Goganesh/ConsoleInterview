@@ -1,5 +1,6 @@
 package ru.otus.homework.dao;
 
+import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,15 +20,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Repository("questionDao")
+@AllArgsConstructor
 public class QuestionDaoCSV implements QuestionDao {
-    @Autowired
+
     private final Resource dataSource;
 
     private static Logger logger = LoggerFactory.getLogger(QuestionDaoCSV.class);
-
-    public QuestionDaoCSV(@Qualifier("dataSource") Resource dataSource) {
-        this.dataSource = dataSource;
-    }
 
     public List<Question> getAllQuestions() throws QuestionLoadingException {
         List<Question> questions = new ArrayList<>();

@@ -3,6 +3,7 @@ package ru.otus.homework.config;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
@@ -11,7 +12,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
-import ru.otus.homework.config.yml.YmlConfig;
+import ru.otus.homework.config.props.YmlConfig;
 import ru.otus.homework.controller.TestController;
 
 import java.util.Locale;
@@ -29,26 +30,22 @@ public class AppConfig {
         this.ymlConfig = ymlConfig;
     }
 
-    @Bean
-    public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {
-        return new PropertySourcesPlaceholderConfigurer();
-    }
-
     @Bean("bundle")
+    @ConditionalOnClass(name = "ru.otus.homework.config.props.LocalizationConfig")
     @ConditionalOnProperty("locale.defaultLocale")
     public ResourceBundle getResourceBundle(){
-        return ResourceBundle.getBundle("i18n/bundle", Locale.forLanguageTag(ymlConfig.getLocale().getDefaultLocale()), new EncodingControl("windows-1251"));
+        return ResourceBundle.getBundle("i18n/bundle", Locale.forLanguageTag(ymlConfig.getLocalizationConfig().getDefaultLocale()), new EncodingControl("windows-1251"));
     }
 
     @Bean("dataSource")
     public Resource getResourceForCSV(){
-        String locale = ymlConfig.getLocale().getDefaultLocale();
-        String classpath = ymlConfig.getLocale().getLocaleClasspath().get(locale);
+        String locale = ymlConfig.getLocalizationConfig().getDefaultLocale();
+        String classpath = ymlConfig.getLocalizationConfig().getLocaleClasspath().get(locale);
         return new ClassPathResource(classpath);
     }
 
-    @Bean
-    @ConditionalOnClass(name = "ru.otus.homework.controller.TestController")
+    @Bean("starter")
+    @ConditionalOnBean(name = "testController")
     public CommandLineRunner starter(TestController testController){
         logger.info("Start student testing");
         return args ->  testController.initTest();

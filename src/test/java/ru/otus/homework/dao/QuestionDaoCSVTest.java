@@ -2,24 +2,26 @@ package ru.otus.homework.dao;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import ru.otus.homework.config.AppConfig;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
 import ru.otus.homework.exeption.QuestionLoadingException;
 import ru.otus.homework.model.Question;
 import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
-
+@SpringBootTest
 @DisplayName("Test class QuestionDaoCSV")
-@ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = {AppConfig.class, QuestionDaoCSV.class})
 class QuestionDaoCSVTest {
 
     @Autowired
     private QuestionDao questionDao;
+
+    @Configuration
+    @ComponentScan(basePackages = {"ru.otus.homework.config", "ru.otus.homework.dao"})
+    static class QuestionDaoTestConfiguration {
+    }
 
     @Test
     void checkSizeOfSource() throws QuestionLoadingException {
