@@ -1,5 +1,6 @@
 package ru.otus.homework.dao;
 
+import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,24 +13,21 @@ import org.supercsv.cellprocessor.ift.CellProcessor;
 import org.supercsv.io.CsvBeanReader;
 import org.supercsv.io.ICsvBeanReader;
 import org.supercsv.prefs.CsvPreference;
-import ru.otus.homework.exeption.QuestionException;
+import ru.otus.homework.exeption.QuestionLoadingException;
 import ru.otus.homework.model.Question;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
 @Repository("questionDao")
+@AllArgsConstructor
 public class QuestionDaoCSV implements QuestionDao {
-    @Autowired
+
     private final Resource dataSource;
 
     private static Logger logger = LoggerFactory.getLogger(QuestionDaoCSV.class);
 
-    public QuestionDaoCSV(@Qualifier("dataSource") Resource dataSource) {
-        this.dataSource = dataSource;
-    }
-
-    public List<Question> getAllQuestions() throws QuestionException {
+    public List<Question> getAllQuestions() throws QuestionLoadingException {
         List<Question> questions = new ArrayList<>();
         try {
             InputStream in = dataSource.getInputStream();
@@ -53,7 +51,7 @@ public class QuestionDaoCSV implements QuestionDao {
                 }
             }
         } catch (Exception ex) {
-            throw new QuestionException(ex.getMessage());
+            throw new QuestionLoadingException(ex);
         }
 
         return questions;
