@@ -15,15 +15,14 @@ import java.util.*;
 
 @ShellComponent
 public class TestController {
-
     private final QuestionService questionService;
     private final UserService userService;
     private final IOService ioService;
     private final BundleService bundleService;
     private final TestResultService testResultService;
     private final AnswerService answerService;
-
     private boolean isInformed;
+    private static Logger logger = LoggerFactory.getLogger(TestController.class);
 
     public TestController(QuestionService questionService, UserService userService, IOService ioService, BundleService bundleService, TestResultService testResultService, AnswerService answerService) {
         this.questionService = questionService;
@@ -33,8 +32,6 @@ public class TestController {
         this.testResultService = testResultService;
         this.answerService = answerService;
     }
-
-    private static Logger logger = LoggerFactory.getLogger(TestController.class);
 
     @ShellMethod(key = {"info", "i"}, value = "information about testing")
     public void greeeting(){
