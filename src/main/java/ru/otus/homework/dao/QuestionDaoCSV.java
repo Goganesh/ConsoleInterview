@@ -3,10 +3,7 @@ package ru.otus.homework.dao;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.io.Resource;
-import org.springframework.stereotype.Repository;
 import org.supercsv.cellprocessor.ParseInt;
 import org.supercsv.cellprocessor.constraint.NotNull;
 import org.supercsv.cellprocessor.ift.CellProcessor;
@@ -19,7 +16,6 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@Repository("questionDao")
 @AllArgsConstructor
 public class QuestionDaoCSV implements QuestionDao {
 

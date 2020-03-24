@@ -12,4 +12,5 @@ import java.util.List;
 public class TestResult {
     private User user;
     private List<Answer> answers;
+    private int sumQuestions;
 }
